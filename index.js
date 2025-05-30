@@ -18,15 +18,15 @@ function parseSentence(sentence) {
 }
 
 function splitOnMainConnective(sentence) {
-  const parsed = myParser.parse(sentence);
+  const parsed = parseSentence(sentence);
   if ("ONLY IF" in parsed) {
     return parsed["ONLY IF"];
   } else return parsed["NOT"];
 }
 
 function modusPonens(sentence1, sentence2) {
-  const parsed1 = myParser.parse(sentence1);
-  const parsed2 = myParser.parse(sentence2);
+  const parsed1 = parseSentence(sentence1);
+  const parsed2 = parseSentence(sentence2);
   const split1 = splitOnMainConnective(sentence1);
   const split2 = splitOnMainConnective(sentence2);
   if ("ONLY IF" in parsed1) {
@@ -34,16 +34,72 @@ function modusPonens(sentence1, sentence2) {
     const consequent = split1[1];
     if (antecedent == JSON.stringify(parsed2)) {
       return consequent;
+    } else {
+      return "Cannot apply Modus Ponens to these sentences";
     }
   } else if ("ONLY IF" in parsed2) {
     const antecedent = JSON.stringify(split2[0]);
     const consequent = split2[1];
     if (antecedent == JSON.stringify(parsed1)) {
       return consequent;
+    } else {
+      return "Cannot apply Modus Ponens to these sentences";
     }
   } else {
     return "Cannot apply Modus Ponens to these sentences";
   }
 }
 
-console.log(modusPonens("(A-B)-(~(D-E))", "A-B"));
+function modusTollens(sentence1, sentence2) {
+  const parsed1 = parseSentence(sentence1);
+  const parsed2 = parseSentence(sentence2);
+  const split1 = splitOnMainConnective(sentence1);
+  const split2 = splitOnMainConnective(sentence2);
+  if ("ONLY IF" in parsed1) {
+    const antecedent = split1[0];
+    const consequent = split1[1];
+    const negatedConsequent = {};
+    negatedConsequent["NOT"] = consequent;
+    const negatedAntecedent = {};
+    negatedAntecedent["NOT"] = antecedent;
+    if (JSON.stringify(negatedConsequent) == JSON.stringify(parsed2)) {
+      return negatedAntecedent;
+    } else {
+      return "Cannot apply Modus Tollens to these sentences";
+    }
+  } else if ("ONLY IF" in parsed2) {
+    const antecedent = split2[0];
+    const consequent = split2[1];
+    const negatedConsequent = {};
+    negatedConsequent["NOT"] = consequent;
+    const negatedAntecedent = {};
+    negatedAntecedent["NOT"] = antecedent;
+    if (JSON.stringify(negatedConsequent) == JSON.stringify(parsed1)) {
+      return negatedAntecedent;
+    } else {
+      return "Cannot apply Modus Tollens to these sentences";
+    }
+  } else {
+    return "Cannot apply Modus Tollens to these sentences";
+  }
+}
+
+function doubleNegationElim(sentence) {
+  const parsed = parseSentence(sentence);
+  if ("NOT" in parsed && "NOT" in parsed["NOT"]) {
+    return parsed["NOT"]["NOT"];
+  } else {
+    return "Cannot apply Double Negation Elimination to this sentence";
+  }
+}
+
+function doubleNegationIntro(sentence) {
+  const parsed = parseSentence(sentence);
+  const negatedSentence = {};
+  const doubleNegatedSentence = {};
+  negatedSentence["NOT"] = parsed;
+  doubleNegatedSentence["NOT"] = negatedSentence;
+  return doubleNegatedSentence;
+}
+
+console.log(doubleNegationIntro("A-B"));
