@@ -1,0 +1,24 @@
+{
+  "name": "logicrogue",
+  "version": "1.0.0",
+  "description": "This is the Capstone Project for Mei Rose, Jsoie, Abby, and Scott. It is the final project of the Carnegie Mellon University TechBridge Bootcamp.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RossignolD/logicRogue.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RossignolD/logicRogue/issues"
+  },
+  "homepage": "https://github.com/RossignolD/logicRogue#readme",
+  "dependencies": {
+    "formula-parser": "^2.0.1",
+    "nodemon": "^3.1.10"
+  }
+}
