@@ -46,4 +46,4 @@ function modusPonens(sentence1, sentence2) {
   }
 }
 
-console.log(modusPonens("(A-B)", "A"));
+console.log(modusPonens("(A-B)-(~(D-E))", "A-B"));
