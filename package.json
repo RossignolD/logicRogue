@@ -1,7 +1,7 @@
 {
   "name": "logicrogue",
   "version": "1.0.0",
-  "description": "This is the Capstone Project for Mei Rose, Jsoie, Abby, and Scott. It is the final project of the Carnegie Mellon University TechBridge Bootcamp.",
+  "description": "This is the Capstone Project for Mei Rose, Josie, Abby, and Scott. It is the final project of the Carnegie Mellon University TechBridge Bootcamp.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
