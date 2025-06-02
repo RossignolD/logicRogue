@@ -94,7 +94,7 @@ export class NaturalDeduction {
       console.log("Solved by ID");
       return true;
     } else {
-      console.log("the sentence is not solved");
+      console.log("the proof is not yet complete");
       return false;
     }
   }
