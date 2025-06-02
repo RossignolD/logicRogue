@@ -20,5 +20,6 @@
   "dependencies": {
     "formula-parser": "^2.0.1",
     "nodemon": "^3.1.10"
-  }
+  },
+  "type":"module"
 }

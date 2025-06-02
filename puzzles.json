@@ -1,0 +1,9 @@
+{
+    "level0":{
+        "showLine": "Q",
+        "premises": [
+            "P-Q",
+            "P"
+        ]
+    }
+}
