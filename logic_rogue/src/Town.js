@@ -7,8 +7,6 @@ export default function Town() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
 
-  // later:
-
   const tileSize = 64;
   const stepSize = 32;
 
@@ -23,7 +21,7 @@ export default function Town() {
     [1, 0, 0, 0, 0, 1, 0, 0, 0, 1],
     [1, 0, 1, 1, 0, 1, 1, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  ];
+  ]; // Change this to map data from a json file
 
   const [position, setPosition] = useAtom(playerPositionAtom);
 
