@@ -15,6 +15,25 @@ export class NaturalDeduction {
       this.premises.map((premise) => new Line(premise, "premise", [])),
     ];
   }
+  addAssumption(type) {
+    if (type == "CD") {
+      let assumption = this.getAntecedent();
+      this.lines.push(new Line(assumption, "Asm. CD"));
+    } else if (type == "ID") {
+      let assumption = {};
+      assumption["NOT"] = this.showLine;
+      this.lines.push(new Line(assumption, "Asm. ID"));
+    }
+  }
+  getAntecedent() {
+    const parsed = parseSentence(this.showLine);
+    if ("ONLY IF" in parsed) {
+      return splitOnMainConnective(parsed)[0];
+    } else {
+      return null;
+    }
+  }
+
   getConsequent() {
     const parsed = parseSentence(this.showLine);
     if ("ONLY IF" in parsed) {
@@ -75,7 +94,7 @@ export class NaturalDeduction {
       console.log("Solved by ID");
       return true;
     } else {
-      console.log("the sentence is not solved");
+      console.log("the proof is not yet complete");
       return false;
     }
   }

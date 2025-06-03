@@ -1,5 +1,5 @@
-{
-    "Given Names":[
+const names = {
+  "Given Names": [
     "Peter",
     "Ruth",
     "Haskell",
@@ -25,9 +25,9 @@
     "Juan Luis",
     "Hao",
     "Jin",
-    "Lotfi"
-    ],
-    "Family Names":[
+    "Lotfi",
+  ],
+  "Family Names": [
     "Abelard",
     "Barcan Marcus",
     "Curry",
@@ -53,7 +53,24 @@
     "Vives",
     "Wang",
     "Yuelin",
-    "Zadeh"
-]
-
+    "Zadeh",
+  ],
+};
+function nameSlotMachine() {
+  const givenNames = names["Given Names"];
+  const familyNames = names["Family Names"];
+  const randomGivenName =
+    givenNames[Math.floor(Math.random() * givenNames.length)];
+  const randomFamilyName =
+    familyNames[Math.floor(Math.random() * familyNames.length)];
+  const fullName = `${randomGivenName} ${randomFamilyName}`;
+  return fullName;
 }
+
+function main() {
+  console.log(nameSlotMachine());
+}
+
+main();
+
+export { nameSlotMachine };
