@@ -5,7 +5,7 @@ import {
   modusTollens,
   doubleNegationElim,
   doubleNegationIntro,
-} from "./parsingAndRules.js";
+} from "./parsingAndRules.mjs";
 
 export class NaturalDeduction {
   constructor(showLine, premises = []) {
@@ -51,17 +51,19 @@ export class NaturalDeduction {
     } else if (rule === "DNE") {
       return doubleNegationElim(sentence1);
     } else if (rule === "DNI") {
-      return doubleNegationIntro(sentence2);
+      return doubleNegationIntro(sentence1);
     } else {
       throw new Error("Unknown inference rule: " + rule);
     }
   }
-  addLine(sentence1, sentence2, justification) {
+
+  addLine(justification, sentence1, sentence2 = null) {
     const conclusion = this.applyInferenceRule(
       justification,
       sentence1,
       sentence2
     );
+    console.log("Conclusion: ", conclusion);
     if (conclusion !== null) {
       const newLine = new Line(conclusion, justification);
       this.lines.push(newLine);
@@ -72,9 +74,8 @@ export class NaturalDeduction {
   }
 
   checkForContradiction(sentence) {
-    const parsed = parseSentence(sentence);
     const negatedSentence = {};
-    negatedSentence["NOT"] = parsed;
+    negatedSentence["NOT"] = sentence;
     for (let line of this.lines) {
       if (JSON.stringify(line) == JSON.stringify(negatedSentence)) {
         return true;
@@ -87,7 +88,7 @@ export class NaturalDeduction {
     ) {
       console.log("Solved by DD");
       return true;
-    } else if (parsed == JSON.stringify(this.getConsequent())) {
+    } else if (sentence == JSON.stringify(this.getConsequent())) {
       console.log("Solved by CD");
       return true;
     } else if (this.checkForContradiction(sentence) == true) {
