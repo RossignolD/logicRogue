@@ -20,13 +20,11 @@ Each Encounter is able to be reconstituted from the following:
 - Encountering
 - Post-encountering
 
-## Structure of the Game Data
-
-- Active NPC (int)
-- Player ref
-
 ### Structure of Player Data
 
 - Player name (random but vetoable)
 - Abilities unlocked (array of strings)
 - Player coordinates (Object containing x and y coordinates)
+- Scene
+- Active NPC (int)
+- Sprite info
