@@ -134,6 +134,7 @@ function doubleNegationElim(sentence) {
 export {
   parseSentence,
   splitOnMainConnective,
+  negateTree,
   getAntecedent,
   getConsequent,
   negateSentence,

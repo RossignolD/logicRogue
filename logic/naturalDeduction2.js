@@ -5,6 +5,10 @@ import {
   modusTollens,
   doubleNegationIntro,
   doubleNegationElim,
+  negateSentence,
+  negateTree,
+  getConsequent,
+  getAntecedent,
 } from "./parsingAndRules2.js";
 
 export class NaturalDeduction {
@@ -12,8 +16,29 @@ export class NaturalDeduction {
     this.showLine = showLine;
     this.premises = premises;
     this.lines = [];
-    for (let premise of premises) {
-      this.lines.push(new Line(parseSentence(premise), "premise"));
+  }
+
+  addAssumption(type) {
+    if (type == "CD" && this.lines.length == 0) {
+      let assumption = getAntecedent(this.showLine);
+      this.lines.push(new Line(assumption, "Asm. CD"));
+      return "Succesfully added assumption for CD";
+    } else if (type == "ID" && this.lines.length == 0) {
+      let assumption = negateSentence(this.showLine);
+      this.lines.push(new Line(assumption, "Asm. ID"));
+      return "Succesfully added assumption for ID";
+    } else return "Cannot add assumption";
+  }
+
+  addPremises() {
+    if (this.premises.length !== 0) {
+      for (let premise of this.premises) {
+        let premiseTree = parseSentence(premise);
+        this.lines.push(new Line(premiseTree, "Premise"));
+      }
+      return "Premises added";
+    } else {
+      return "No premises to be added";
     }
   }
 
@@ -54,7 +79,6 @@ export class NaturalDeduction {
     if (conclusion) {
       const newLine = new Line(conclusion, justification);
       this.lines.push(newLine);
-      this.isSolved(conclusion);
       if (this.isSolved(conclusion)) {
         return "Proof completed";
       } else {
@@ -62,8 +86,32 @@ export class NaturalDeduction {
       }
     } else return "Cannot add the new line";
   }
+  checkForCDCompletion(tree) {
+    if (JSON.stringify(tree) == JSON.stringify(getConsequent(this.showLine))) {
+      console.log("Solved by CD");
+      return true;
+    } else {
+      return false;
+    }
+  }
+  checkForIDCompletion(tree) {
+    const negatedTree = negateTree(tree);
+    for (let line of this.lines) {
+      if (JSON.stringify(line.tree) == JSON.stringify(negatedTree)) {
+        console.log("Solved by ID");
+        return true;
+      }
+    }
+  }
+
   isSolved(tree) {
-    return JSON.stringify(tree) == JSON.stringify(parseSentence(this.showLine));
+    if (JSON.stringify(tree) == JSON.stringify(parseSentence(this.showLine))) {
+      return true;
+    } else if (this.checkForCDCompletion(tree)) {
+      return true;
+    } else if (this.checkForIDCompletion(tree)) {
+      return true;
+    } else return false;
   }
 }
 
