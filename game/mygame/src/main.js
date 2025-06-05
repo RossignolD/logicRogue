@@ -1,9 +1,9 @@
 import kaplay from "kaplay";
 import "kaplay/global";
 
-useEffect(() => {
-  window.addEventListener("message", (event) => {});
-});
+// useEffect(() => {
+//   window.addEventListener("message", (event) => {});
+// });
 
 const moveSpeed = 200;
 
@@ -208,7 +208,9 @@ k.scene("wizard_dialogue", () => {
         showDialog("You run. Coward.");
         globalX -= 64;
         globalY -= 64;
-        go("town");
+        wait(1, () => {
+          go("town");
+        });
       },
     },
     {
