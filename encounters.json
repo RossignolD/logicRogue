@@ -1,0 +1,27 @@
+{
+    "Encounter 1.1":{
+        "showLine": "Q",
+        "premises": ["P-Q", "P"],
+        "par": 2
+    },
+    "Encounter 1.2":{
+        "showLine": "~~R",
+        "premises": ["(P-Q)-R", "~~(P-Q)"],
+        "par": 3
+    },
+    "Encounter 1.3":{
+        "showLine": "Q",
+        "premises":["(~(P-Q))-(~R)", "R", "P"],
+        "par": 4
+    },
+    "Encounter 2.1":{
+        "showLine": "P-R",
+        "premises": ["P-Q", "Q-R"],
+        "par":4
+    },
+    "Encounter 2.2":{
+        "showLine": "~P",
+        "premises": ["P-Q", "P-(~Q)"],
+        "par": 5
+    }
+}
