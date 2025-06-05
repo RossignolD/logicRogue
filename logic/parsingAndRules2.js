@@ -106,7 +106,7 @@ function modusTollens(sentence1, sentence2) {
       return "Negated Consequent is not correct";
     }
   } else {
-    return "Modus Ponens is not applicable here";
+    return "Modus Tollens is not applicable here";
   }
 }
 
@@ -121,8 +121,7 @@ function doubleNegationElim(sentence) {
   if ("NOT" in tree && "NOT" in tree["NOT"]) {
     return tree["NOT"]["NOT"];
   } else {
-    return;
-    ("There is no double negation that can be eliminated");
+    return "There is no double negation that can be eliminated";
   }
 }
 

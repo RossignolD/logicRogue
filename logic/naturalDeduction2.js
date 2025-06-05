@@ -7,8 +7,6 @@ import {
   doubleNegationElim,
 } from "./parsingAndRules2.js";
 
-import equal from "deep-equal";
-
 export class NaturalDeduction {
   constructor(showLine, premises = []) {
     this.showLine = showLine;
