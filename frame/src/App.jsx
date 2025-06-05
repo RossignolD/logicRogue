@@ -24,6 +24,11 @@ function App() {
       "Hello from parent",
       "http://localhost:3001"
     );
+    let inventory = new Set();
+    let rules = [];
+    function updateInventory(sentence) {
+      inventory.add(sentence);
+    }
   }, []);
   return (
     // <div>
