@@ -18,12 +18,14 @@ function App() {
       }
     });
     window.addEventListener("message", (event) => {
-      console.log("message received from iframe:", event.data);
+      console.log("message received from kaplay:", event.data);
     });
-    iframe.contentWindow.postMessage(
-      "Hello from parent",
-      "http://localhost:3001"
-    );
+    setTimeout(() => {
+      iframe.contentWindow.postMessage(
+        "Hello from react",
+        "http://localhost:3001/"
+      );
+    }, 200);
   }, []);
   return (
     // <div>
@@ -42,6 +44,7 @@ function App() {
     //   </button>
     // </div>
     <div>
+      <h1>React App with Iframe</h1>
       <iframe
         tag="iframe"
         src="http://localhost:3001"
