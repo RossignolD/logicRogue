@@ -17,15 +17,37 @@ function App() {
         iframe.style.width = `${window.innerWidth}px`;
       }
     });
+    window.addEventListener("message", (event) => {
+      console.log("message received from iframe:", event.data);
+    });
+    iframe.contentWindow.postMessage(
+      "Hello from parent",
+      "http://localhost:3001"
+    );
   }, []);
   return (
+    // <div>
+    //   <button
+    //     onClick={() => {
+    //       const iframe = document.querySelector("iframe");
+    //       if (window.parent) {
+    //         window.parent.postMessage(
+    //           "Hello from parent",
+    //           "http://localhost:5173"
+    //         );
+    //       }
+    //     }}
+    //   >
+    //     Send Message to Iframe
+    //   </button>
+    // </div>
     <div>
       <iframe
         tag="iframe"
         src="http://localhost:3001"
         width="100%"
         height="100%"
-        allowFullScreen="true"
+        allowFullScreen={true}
       ></iframe>
     </div>
   );

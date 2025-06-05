@@ -1,6 +1,10 @@
 import kaplay from "kaplay";
 import "kaplay/global";
 
+useEffect(() => {
+  window.addEventListener("message", (event) => {});
+});
+
 const moveSpeed = 200;
 
 const map = ["110010", "010001", "222010"];
@@ -26,10 +30,30 @@ const k = kaplay({
 });
 
 loadRoot("./");
+setLayers(["bg", "obj", "ui"], "bg");
+//loads player sprite
+loadSprite("player", "sprites/player.png");
+//creates player
+function createPlayer(x = 64, y = 64) {
+  return add([
+    sprite("player"),
+    pos(x, y),
+    anchor("center"),
+    area({ scale: 0.75 }),
+    body(),
+    "player",
+    layer("obj"),
+  ]);
+}
+
+let lastX = 0;
+let globalX = 64;
+let globalY = 64;
 
 scene("town", () => {
   const TILE_WIDTH = 128;
   const TILE_HEIGHT = 128;
+  const player = createPlayer(globalX, globalY);
 
   loadSprite("cobble", "sprites/cobble_tile.png");
   loadSprite("mossy cobble", "sprites/mossy_tile_alpha.png");
@@ -51,23 +75,12 @@ scene("town", () => {
     },
   });
 
-  //loads player sprite
-  loadSprite("player", "sprites/player.png");
-  //creates player
-  const player = add([
-    sprite("player"),
-    pos(64, 64),
-    anchor("center"),
-    area({ scale: 0.75 }),
-    body(),
-    "player",
-  ]);
-
   // Set camera position to follow the player
   const playerObject = get("player")[0];
-  let lastX = player.pos.x;
 
   player.onUpdate(() => {
+    globalX = player.pos.x;
+    globalY = player.pos.y;
     setCamPos(playerObject.pos);
     if (player.pos.x < lastX) {
       player.flipX = false; // Flip horizontally
@@ -89,6 +102,122 @@ scene("town", () => {
   onButtonDown("right", () => {
     player.move(moveSpeed, 0);
   });
+
+  loadSprite("wizard", "sprites/wizard.png");
+  const wizard = add([
+    sprite("wizard"),
+    pos(500, 500),
+    anchor("center"),
+    area(),
+    body({ isStatic: true }),
+    "wizard",
+  ]);
+
+  onCollide("player", "wizard", () => {
+    window.parent.postMessage("Collided with wizard", "http://localhost:5173");
+    go("wizard_dialogue");
+  });
+});
+
+k.scene("wizard_dialogue", () => {
+  k.add([k.rect(k.width(), k.height()), k.color(0, 0, 0)]);
+
+  const DIALOG_WIDTH = 500;
+  const DIALOG_HEIGHT = 140;
+  const BUTTON_WIDTH = 460;
+  const BUTTON_HEIGHT = 35;
+
+  const dialogBox = k.add([
+    k.rect(DIALOG_WIDTH, DIALOG_HEIGHT),
+    k.pos(
+      (k.width() - DIALOG_WIDTH) / 2,
+      (k.height() - DIALOG_HEIGHT) / 2 - 80
+    ),
+    k.color(255, 255, 255),
+    k.outline(4),
+    k.z(10),
+  ]);
+
+  const dialogText = k.add([
+    k.text("", { size: 24, width: DIALOG_WIDTH - 40 }),
+    k.pos(
+      (k.width() - DIALOG_WIDTH) / 2 + 20,
+      (k.height() - DIALOG_HEIGHT) / 2 - 70
+    ),
+    k.color(0, 0, 0),
+    k.z(11),
+  ]);
+
+  const choices = [];
+
+  function clearChoices() {
+    for (const c of choices) {
+      c.destroy();
+    }
+    choices.length = 0;
+  }
+
+  function showDialog(text, options) {
+    dialogText.text = text;
+    clearChoices();
+
+    if (options) {
+      const totalHeight = options.length * (BUTTON_HEIGHT + 10);
+      const startY = (k.height() + DIALOG_HEIGHT) / 2 - totalHeight / 2 + 20;
+
+      options.forEach((opt, i) => {
+        const x = (k.width() - BUTTON_WIDTH) / 2;
+        const y = startY + i * (BUTTON_HEIGHT + 10);
+
+        const btn = k.add([
+          k.rect(BUTTON_WIDTH, BUTTON_HEIGHT),
+          k.pos(x, y),
+          k.color(200, 200, 255),
+          k.area(),
+          k.z(12),
+          { action: opt.onSelect },
+        ]);
+
+        k.add([
+          k.text(opt.text, { size: 20 }),
+          k.pos(x + 10, y + 5),
+          k.color(0, 0, 0),
+          k.z(13),
+        ]);
+
+        btn.onClick(() => {
+          opt.onSelect();
+        });
+
+        choices.push(btn);
+      });
+    }
+  }
+
+  // Start the dialogue
+  showDialog("You see a mysterious figure. What do you do?", [
+    {
+      text: "Talk to them",
+      onSelect: () => {
+        showDialog("They nod and say hello.");
+      },
+    },
+    {
+      text: "Run away",
+      onSelect: () => {
+        showDialog("You run. Coward.");
+        globalX -= 64;
+        globalY -= 64;
+        go("town");
+      },
+    },
+    {
+      text: "Draw your sword",
+      onSelect: () => {
+        showDialog("They raise an eyebrow. 'Really?'");
+      },
+    },
+  ]);
 });
 
 onClick(() => addKaboom(mousePos()));
