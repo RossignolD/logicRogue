@@ -28,3 +28,5 @@ Each Encounter is able to be reconstituted from the following:
 - Scene
 - Active NPC (int)
 - Sprite info
+- Dialogue State (object with keys are NPCs, values are dialogue state for that NPC )
+  - Possible states are "Not encountered", "Encountered", "Encountered successfully", "Encountered unsuccessfully"
