@@ -2,3 +2,5 @@
   display: flex;
   flex-direction: column;
 }
+
+/* z-index of the Par static element above all other components */
