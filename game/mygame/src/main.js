@@ -201,6 +201,7 @@ k.scene("wizard_dialogue", () => {
       text: "Talk to them",
       onSelect: () => {
         showDialog("They nod and say hello.");
+        //will eventually lead to more dialogue options
       },
     },
     {
@@ -218,6 +219,7 @@ k.scene("wizard_dialogue", () => {
       text: "Draw your sword",
       onSelect: () => {
         showDialog("They raise an eyebrow. 'Really?'");
+        //eventually go to combat
       },
     },
   ]);
