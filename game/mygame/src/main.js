@@ -47,10 +47,10 @@ let globalX = 64;
 let globalY = 64;
 
 scene("town", () => {
-  window.addEventListener("message", (event) => {
-    console.log("Message received from parent:", event.data);
-    add([rect(200, 50), pos(50, 50), color(255, 0, 0)]);
-  });
+  // window.addEventListener("message", (event) => {
+  //   console.log("Message received from parent:", event.data);
+  //   add([rect(200, 50), pos(50, 50), color(255, 0, 0)]);
+  // });
   window.parent.postMessage("Hello from iframe", "http://localhost:5173");
   const TILE_WIDTH = 128;
   const TILE_HEIGHT = 128;
@@ -219,6 +219,17 @@ k.scene("wizard_dialogue", () => {
       text: "Draw your sword",
       onSelect: () => {
         showDialog("They raise an eyebrow. 'Really?'");
+        try {
+          wait(1, () => {
+            window.parent.postMessage(
+              "battle initiated",
+              "http://localhost:5173"
+            );
+          });
+        } catch (error) {
+          console.error("Error initiating battle:", error);
+        }
+
         //eventually go to combat
       },
     },

@@ -4,6 +4,8 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
+  const [isBattling, setIsBattling] = useState(false);
+
   useEffect(() => {
     const iframe = document.querySelector("iframe");
     if (iframe) {
@@ -19,6 +21,9 @@ function App() {
     });
     window.addEventListener("message", (event) => {
       console.log("message received from kaplay:", event.data);
+      if (event.data === "battle initiated") {
+        setIsBattling(true);
+      }
     });
     setTimeout(() => {
       iframe.contentWindow.postMessage(
@@ -45,6 +50,7 @@ function App() {
     // </div>
     <div>
       <h1>React App with Iframe</h1>
+      {isBattling && <p>Battle is ongoing...</p>}
       <iframe
         tag="iframe"
         src="http://localhost:3001"
