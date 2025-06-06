@@ -42,3 +42,22 @@ test("can complete a natural deduction by DD", () => {
   nd.addLine("MP", "P-Q", "P");
   expect(nd.addLine("MP", "P-Q", "P")).toBe("Proof completed");
 });
+
+test("can complete a natural deduction by CD", () => {
+  const nd = new NaturalDeduction("P-R", ["P-Q", "Q-R"]);
+  nd.addAssumption("CD");
+  nd.addPremises();
+  nd.addLine("MP", "P", "P-Q");
+  nd.addLine("MP", "Q", "Q-R");
+  expect(nd.addLine("MP", "Q", "Q-R")).toBe("Proof completed");
+});
+
+test("can complete a natural deduction by ID", () => {
+  const nd = new NaturalDeduction("~P", ["P-Q", "P-(~Q)"]);
+  nd.addAssumption("ID");
+  nd.addPremises();
+  nd.addLine("DNE", "~~P");
+  nd.addLine("MP", "P", "P-(~Q)");
+  nd.addLine("MP", "P", "P-Q");
+  expect(nd.addLine("MP", "P", "P-Q")).toBe("Proof completed");
+});

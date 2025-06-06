@@ -1,4 +1,4 @@
-{
+[{
     "Encounter 1.1":{
         "showLine": "Q",
         "premises": ["P-Q", "P"],
@@ -24,4 +24,4 @@
         "premises": ["P-Q", "P-(~Q)"],
         "par": 5
     }
-}
+}]

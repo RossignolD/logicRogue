@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import Encounter from "./Encounter.jsx";
 
 function App() {
   const [isBattling, setIsBattling] = useState(false);
@@ -20,7 +21,7 @@ function App() {
       }
     });
     window.addEventListener("message", (event) => {
-      console.log("message received from kaplay:", event.data);
+      // console.log("message received from kaplay:", event.data);
       if (event.data === "battle initiated") {
         setIsBattling(true);
       }
@@ -58,6 +59,7 @@ function App() {
         height="100%"
         allowFullScreen={true}
       ></iframe>
+      {isBattling && <Encounter encounterName="Encounter 1.1"></Encounter>}
     </div>
   );
 }

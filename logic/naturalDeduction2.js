@@ -94,12 +94,32 @@ export class NaturalDeduction {
       return false;
     }
   }
-  checkForIDCompletion(tree) {
-    const negatedTree = negateTree(tree);
+  // checkForIDCompletion(myTree) {
+  //   const negatedTree = negateTree(myTree);
+  //   for (let line of this.lines) {
+  //     if (JSON.stringify(line["tree"]) == JSON.stringify(negatedTree)) {
+  //       console.log("Solved by ID");
+  //       return true;
+  //     } else if (JSON.stringify(negateTree(line["tree"])) == myTree) {
+  //       console.log("Solved by ID");
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  // }
+
+  checkForIDCompletion(myTree) {
+    const negatedTree = negateTree(myTree);
     for (let line of this.lines) {
-      if (JSON.stringify(line.tree) == JSON.stringify(negatedTree)) {
-        console.log("Solved by ID");
+      if (JSON.stringify(negatedTree) == JSON.stringify(line.tree)) {
         return true;
+      } else if (
+        JSON.stringify(myTree) == JSON.stringify(negateTree(line.tree))
+      ) {
+        return true;
+      } else {
+        return false;
       }
     }
   }
