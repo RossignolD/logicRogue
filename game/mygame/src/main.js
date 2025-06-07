@@ -42,7 +42,6 @@ function createPlayer(x = 64, y = 64) {
   ]);
 }
 
-let lastX = 0;
 let globalX = 64;
 let globalY = 64;
 
@@ -79,6 +78,7 @@ scene("town", () => {
   // Set camera position to follow the player
   const playerObject = get("player")[0];
 
+  let lastX = 0;
   player.onUpdate(() => {
     globalX = player.pos.x;
     globalY = player.pos.y;
@@ -104,7 +104,7 @@ scene("town", () => {
     player.move(moveSpeed, 0);
   });
 
-  loadSprite("wizard", "sprites/wizard.png");
+  loadSprite("wizard", "sprites/wizard.png"); //change this to assets path
   const wizard = add([
     sprite("wizard"),
     pos(500, 500),
