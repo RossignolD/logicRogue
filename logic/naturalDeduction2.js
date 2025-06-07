@@ -1,6 +1,6 @@
 import {
   parseSentence,
-  splitOnMainConnective,
+  treeToSentence,
   modusPonens,
   modusTollens,
   doubleNegationIntro,
@@ -132,6 +132,13 @@ export class NaturalDeduction {
     } else if (this.checkForIDCompletion(tree)) {
       return true;
     } else return false;
+  }
+  prettyPrintLines() {
+    const prettyPrintedLines = [];
+    for (let line of this.lines) {
+      prettyPrintedLines.push(treeToSentence(line.tree));
+    }
+    return prettyPrintedLines;
   }
 }
 

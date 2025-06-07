@@ -22,6 +22,24 @@ function parseSentence(sentence) {
   }
 }
 
+function treeToSentence(tree) {
+  if (tree["atomic"]) {
+    return tree["atomic"];
+  } else if ("NOT" in tree) {
+    return "(" + "~" + treeToSentence(tree["NOT"]) + ")";
+  } else if ("ONLY IF" in tree) {
+    return (
+      "(" +
+      treeToSentence(tree["ONLY IF"][0]) +
+      "→" +
+      treeToSentence(tree["ONLY IF"][1]) +
+      ")"
+    );
+  } else {
+    return "Invalid tree structure";
+  }
+}
+
 function splitOnMainConnective(sentence) {
   const tree = parseSentence(sentence);
   if ("ONLY IF" in tree) {
@@ -134,6 +152,7 @@ function doubleNegationElim(sentence) {
 export {
   parseSentence,
   splitOnMainConnective,
+  treeToSentence,
   negateTree,
   getAntecedent,
   getConsequent,

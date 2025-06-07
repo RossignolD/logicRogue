@@ -8,6 +8,7 @@ import {
   modusTollens,
   doubleNegationIntro,
   doubleNegationElim,
+  treeToSentence,
 } from "./parsingAndRules2";
 
 test("correctly parses an atomic sentence", () => {
@@ -115,4 +116,28 @@ test("double negation intro works on atomic sentences", () => {
 test("double negation elimination works on atomic sentences", () => {
   const conclusion = doubleNegationElim("~(~(P))");
   expect(conclusion).toStrictEqual({ atomic: "P" });
+});
+
+test("can turn an atomic tree into a sentence", () => {
+  const sentence = treeToSentence({ atomic: "P" });
+  expect(sentence).toBe("P");
+});
+
+test("can turn a negation of an atomic tree into a sentence", () => {
+  const sentence = treeToSentence({ NOT: { atomic: "P" } });
+  expect(sentence).toBe("(~P)");
+});
+
+test("can turn a material conditional tree of atomic sentences into correct sentence", () => {
+  const sentence = treeToSentence({
+    "ONLY IF": [{ atomic: "P" }, { atomic: "Q" }],
+  });
+  expect(sentence).toBe("(P-Q)");
+});
+
+test("can turn a more complex tree into a sentence", () => {
+  const sentence = treeToSentence({
+    "ONLY IF": [{ atomic: "P" }, { NOT: { atomic: "Q" } }],
+  });
+  expect(sentence).toBe("(P-(~Q))");
 });
