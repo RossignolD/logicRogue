@@ -22,11 +22,12 @@ Each Encounter is able to be reconstituted from the following:
 
 ### Structure of Player Data
 
-- Player name (random but vetoable)
-- Abilities unlocked (array of strings)
+<!-- - Player name (random but vetoable) (nice to have but not going to be in right now) -->
+
+- Abilities unlocked (array of strings) (Being handled in react as encounters are being handled there)
 - Player coordinates (Object containing x and y coordinates)
 - Scene
-- Active NPC (int)
-- Sprite info
-- Dialogue State (object with keys are NPCs, values are dialogue state for that NPC )
-  - Possible states are "Not encountered", "Encountered", "Encountered successfully", "Encountered unsuccessfully"
+<!-- - Active NPC (int)(nice to have but not going to be in right now)
+- Sprite info(nice to have but not going to be in right now)
+- Dialogue State (object with keys are NPCs, values are dialogue state for that NPC )(nice to have but not going to be in right now)
+  - Possible states are "Not encountered", "Encountered", "Encountered successfully", "Encountered unsuccessfully" -->

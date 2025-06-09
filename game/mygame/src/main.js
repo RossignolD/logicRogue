@@ -44,12 +44,16 @@ function createPlayer(x = 64, y = 64) {
 
 let globalX = 64;
 let globalY = 64;
-
+window.addEventListener("message", (event) => {
+  if (event.data.message === "Load game") {
+    console.log("Message received from parent:", event.data);
+    let sceneToBeLoaded = event.data.scene;
+    globalX = event.data.position.X;
+    globalY = event.data.position.Y;
+    go(sceneToBeLoaded);
+  }
+});
 scene("town", () => {
-  // window.addEventListener("message", (event) => {
-  //   console.log("Message received from parent:", event.data);
-  //   add([rect(200, 50), pos(50, 50), color(255, 0, 0)]);
-  // });
   window.parent.postMessage("Hello from iframe", "http://localhost:5173");
   const TILE_WIDTH = 128;
   const TILE_HEIGHT = 128;
@@ -351,4 +355,3 @@ k.scene("wizard_dialogue", () => {
 });
 
 onClick(() => addKaboom(mousePos()));
-go("town");

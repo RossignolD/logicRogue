@@ -36,6 +36,16 @@ function App() {
     });
     setTimeout(() => {
       iframe.contentWindow.postMessage(
+        {
+          message: "Load game",
+          position: { X: 600, Y: 600 }, //load these from database
+          scene: "town", //load these from database
+        },
+        "http://localhost:3001/"
+      );
+    }, 1000);
+    setTimeout(() => {
+      iframe.contentWindow.postMessage(
         "Hello from react",
         "http://localhost:3001/"
       );
