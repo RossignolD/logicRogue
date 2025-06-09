@@ -80,28 +80,30 @@ scene("town", () => {
 
   let lastX = 0;
   player.onUpdate(() => {
-    globalX = player.pos.x;
-    globalY = player.pos.y;
-    setCamPos(playerObject.pos);
-    if (player.pos.x < lastX) {
-      player.flipX = false; // Flip horizontally
-    } else if (player.pos.x > lastX) {
-      player.flipX = true; // Unflip horizontally
+    if (!isPaused) {
+      globalX = player.pos.x;
+      globalY = player.pos.y;
+      setCamPos(playerObject.pos);
+      if (player.pos.x < lastX) {
+        player.flipX = false; // Flip horizontally
+      } else if (player.pos.x > lastX) {
+        player.flipX = true; // Unflip horizontally
+      }
+      lastX = player.pos.x;
     }
-    lastX = player.pos.x;
   });
 
   onButtonDown("up", () => {
-    player.move(0, -moveSpeed);
+    if (!isPaused) player.move(0, -moveSpeed);
   });
   onButtonDown("down", () => {
-    player.move(0, moveSpeed);
+    if (!isPaused) player.move(0, moveSpeed);
   });
   onButtonDown("left", () => {
-    player.move(-moveSpeed, 0);
+    if (!isPaused) player.move(-moveSpeed, 0);
   });
   onButtonDown("right", () => {
-    player.move(moveSpeed, 0);
+    if (!isPaused) player.move(moveSpeed, 0);
   });
 
   loadSprite("wizard", "sprites/wizard.png"); //change this to assets path
@@ -117,6 +119,118 @@ scene("town", () => {
   onCollide("player", "wizard", () => {
     window.parent.postMessage("Collided with wizard", "http://localhost:5173");
     go("wizard_dialogue");
+  });
+
+  function addPauseButton(labelText, yOffset, onClickAction) {
+    const BUTTON_WIDTH = 260;
+    const BUTTON_HEIGHT = 40;
+
+    const button = pauseMenu.add([
+      rect(BUTTON_WIDTH, BUTTON_HEIGHT, { radius: 8 }),
+      pos(0, yOffset), // position relative to center of pauseMenu
+      anchor("center"),
+      color(200, 200, 255),
+      area(),
+      z(1001),
+      "pauseButton",
+    ]);
+
+    const textLabel = pauseMenu.add([
+      text(labelText, { size: 20 }),
+      pos(0, yOffset),
+      anchor("center"),
+      color(0, 0, 0),
+      z(1002),
+    ]);
+
+    button.onClick(onClickAction);
+
+    button.onHover(() => {
+      button.color = rgb(180, 180, 255);
+    });
+
+    button.onHoverEnd(() => {
+      button.color = rgb(200, 200, 255);
+    });
+
+    return { button, textLabel };
+  }
+
+  // Global paused flag
+  let isPaused = false;
+  let curTween = null;
+
+  // Pause menu UI setup
+  const pauseMenu = add([
+    rect(300, 400),
+    color(255, 255, 255),
+    outline(4),
+    anchor("center"),
+    pos(center().add(0, 700)), // hidden below screen initially
+    z(1000), // make sure it's on top
+    "pauseMenu",
+    fixed(),
+    layer("ui"),
+  ]);
+
+  pauseMenu.hidden = true;
+  pauseMenu.paused = true;
+
+  // Toggle pause with "p"
+  onKeyPress("p", () => {
+    isPaused = !isPaused;
+
+    // Cancel existing animation if any
+    if (curTween) curTween.cancel();
+
+    // Animate menu in or out
+    curTween = tween(
+      pauseMenu.pos,
+      isPaused ? center() : center().add(0, 700),
+      0.6,
+      (p) => (pauseMenu.pos = p),
+      easings.easeOutElastic
+    );
+
+    if (isPaused) {
+      pauseMenu.hidden = false;
+      pauseMenu.paused = false;
+    } else {
+      curTween.onEnd(() => {
+        pauseMenu.hidden = true;
+        pauseMenu.paused = true;
+      });
+    }
+  });
+
+  addPauseButton("Resume", -130, () => {
+    isPaused = false;
+    console.log("Resuming game");
+    if (curTween) curTween.cancel();
+
+    curTween = tween(
+      pauseMenu.pos,
+      center().add(0, 700),
+      0.6,
+      (p) => (pauseMenu.pos = p),
+      easings.easeOutElastic
+    );
+
+    curTween.onEnd(() => {
+      pauseMenu.hidden = true;
+      pauseMenu.paused = true;
+    });
+  });
+
+  addPauseButton("Save Game", -80, () => {
+    window.parent.postMessage(
+      {
+        message: "Save game",
+        position: { transferGlobalX: globalX, transferGlobalY: globalY },
+        thisScene: getSceneName(),
+      },
+      "http://localhost:5173"
+    );
   });
 });
 

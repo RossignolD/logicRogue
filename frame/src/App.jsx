@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-import Encounter from "./Encounter.jsx";
+//import Encounter from "./Encounter.jsx";
+//had to comment this out because I couldn't get formula-parser to work
 
 function App() {
   const [isBattling, setIsBattling] = useState(false);
@@ -24,6 +25,13 @@ function App() {
       // console.log("message received from kaplay:", event.data);
       if (event.data === "battle initiated") {
         setIsBattling(true);
+      }
+    });
+    window.addEventListener("message", (event) => {
+      if (event.data.message === "Save game") {
+        console.log("Game saved");
+        console.log("Transferrable data:", event.data.position);
+        console.log("Current scene:", event.data.thisScene);
       }
     });
     setTimeout(() => {
