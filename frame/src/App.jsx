@@ -59,7 +59,7 @@ function App() {
         height="100%"
         allowFullScreen={true}
       ></iframe>
-      {isBattling && <Encounter encounterName="Encounter 1.1"></Encounter>}
+      {isBattling && <Encounter encounterName="Encounter 1.3"></Encounter>}
     </div>
   );
 }

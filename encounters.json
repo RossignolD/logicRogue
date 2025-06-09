@@ -1,18 +1,22 @@
-[{
+{
     "Encounter 1.1":{
         "showLine": "Q",
         "premises": ["P-Q", "P"],
-        "par": 2
+        "par": 2,
+        "unlockedRules": ["MP", "Add Premises"]
+        
     },
     "Encounter 1.2":{
         "showLine": "~~R",
         "premises": ["(P-Q)-R", "~~(P-Q)"],
-        "par": 4
+        "par": 4,
+        "unlockedRules":["MP",  "Add Premises", "DNE", "DNI"]
     },
     "Encounter 1.3":{
         "showLine": "Q",
         "premises":["(~(P-Q))-(~R)", "R", "P"],
-        "par": 4
+        "par": 4,
+        "unlockedRules":["MP","Add Premises", "DNE", "DNI", "MT"]
     },
     "Encounter 2.1":{
         "showLine": "P-R",
@@ -24,4 +28,4 @@
         "premises": ["P-Q", "P-(~Q)"],
         "par": 5
     }
-}]
+}
