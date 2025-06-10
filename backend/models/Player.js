@@ -5,9 +5,6 @@ const playerSchema = new mongoose.Schema({
   _id: { type: String, default: uuidv4 },
   username: { type: String, required: true, unique: true }, // A human-readable username
   passwordHash: { type: String, required: true }, // Store the hashed password
-  sprite: { type: String, default: 'default_sprite.png' }, //URL or filename for the player's sprite
-  level: { type: Number, default: 1 },
-  experience: { type: Number, default: 0 },
   inventory: { type: [String], default: [] }, // Array of item IDs
   spellbook: { type: [String], default: [] }, // Array of spell IDs/names
   currentLocation: { type: String, default: 'start' },
@@ -16,7 +13,7 @@ const playerSchema = new mongoose.Schema({
 
 playerSchema.methods.toJSON = function() {
     const playerObject = this.toObject();
-    delete playerObject.passwordHash; // Crucial: Exclude password hash from API responses
+    delete playerObject.passwordHash; // Exclude password hash from API responses
     return playerObject;
 };
 
