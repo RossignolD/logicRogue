@@ -350,13 +350,31 @@ k.scene("wizard_dialogue", () => {
           } catch (error) {
             console.error("Error initiating battle:", error);
           }
-
           //eventually go to combat
         },
       },
     ]);
   }
   haveDialog();
+
+  window.addEventListener("message", (event) => {
+    if (event.data === "Proof completed! YAY!") {
+      console.log("Proof completed!");
+    }
+  });
+
+  window.addEventListener("message", (event) => {
+    if (event.data === "Proof completed! YAY!") {
+      showDialog("You have completed the proof! The wizard nods in approval.", [
+        {
+          text: "Continue",
+          onSelect: () => {
+            go("town");
+          },
+        },
+      ]);
+    }
+  });
 });
 
 onClick(() => addKaboom(mousePos()));

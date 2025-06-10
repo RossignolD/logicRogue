@@ -60,7 +60,10 @@ function Encounter({ encounterName, iframeRef }) {
         nd.current.addLine(pendingRule, inventoryItems[i1]); // You must implement this method
         updateInventory(nd.current.prettyPrintLines());
         if (nd.current.isSolved()) {
-          iframeRef.current.contentWindow.postMessage("Proof completed! YAY!");
+          iframeRef.current.contentWindow.postMessage(
+            "Proof completed! YAY!",
+            "http://localhost:3001/"
+          );
         }
       } catch (e) {
         alert(`Failed to apply ${pendingRule}: ${e.message}`);
@@ -76,7 +79,11 @@ function Encounter({ encounterName, iframeRef }) {
         nd.current.addLine(pendingRule, inventoryItems[i1], inventoryItems[i2]);
         updateInventory(nd.current.prettyPrintLines());
         if (nd.current.isSolved()) {
-          iframeRef.current.contentWindow.postMessage("Proof completed! YAY!");
+          console.log("Message sent");
+          iframeRef.current.contentWindow.postMessage(
+            "Proof completed! YAY!",
+            "http://localhost:3001/"
+          );
         }
       } catch (e) {
         alert(`Failed to apply ${pendingRule}: ${e.message}`);
@@ -106,9 +113,9 @@ function Encounter({ encounterName, iframeRef }) {
       </div>
       <div className={styles.rules}>
         <h2>Rules</h2>
-        {encounters[encounterName].unlockedRules.map((rule) => {
+        {encounters[encounterName].unlockedRules.map((rule, index) => {
           return (
-            <button onClick={(event) => handleClick(rule, event)}>
+            <button onClick={(event) => handleClick(rule, event)} key={index}>
               {rule}
             </button>
           );
