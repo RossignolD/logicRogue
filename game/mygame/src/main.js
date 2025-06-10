@@ -3,7 +3,7 @@ import "kaplay/global";
 
 const moveSpeed = 200;
 
-const map = ["110010", "010001", "222010"];
+const map = ["110010", "010001", "222010", "010001", "110010", "000000"];
 const k = kaplay({
   background: "#D3D3D3",
   scale: 1,
@@ -314,44 +314,49 @@ k.scene("wizard_dialogue", () => {
   }
 
   // Start the dialogue
-  showDialog("You see a mysterious figure. What do you do?", [
-    {
-      text: "Talk to them",
-      onSelect: () => {
-        showDialog("They nod and say hello.");
-        //will eventually lead to more dialogue options
-      },
-    },
-    {
-      text: "Run away",
-      onSelect: () => {
-        showDialog("You run. Coward.");
-        globalX -= 64;
-        globalY -= 64;
-        wait(1, () => {
-          go("town");
-        });
-      },
-    },
-    {
-      text: "Draw your sword",
-      onSelect: () => {
-        showDialog("They raise an eyebrow. 'Really?'");
-        try {
+  function haveDialog() {
+    showDialog("You see a mysterious figure. What do you do?", [
+      {
+        text: "Talk to them",
+        onSelect: () => {
+          showDialog("They nod and say hello.");
           wait(1, () => {
-            window.parent.postMessage(
-              "battle initiated",
-              "http://localhost:5173"
-            );
+            haveDialog();
           });
-        } catch (error) {
-          console.error("Error initiating battle:", error);
-        }
-
-        //eventually go to combat
+        },
       },
-    },
-  ]);
+      {
+        text: "Run away",
+        onSelect: () => {
+          showDialog("You run. Coward.");
+          globalX -= 64;
+          globalY -= 64;
+          wait(1, () => {
+            go("town");
+          });
+        },
+      },
+      {
+        text: "Draw your sword",
+        onSelect: () => {
+          showDialog("They raise an eyebrow. 'Really?'");
+          try {
+            wait(1, () => {
+              window.parent.postMessage(
+                "battle initiated",
+                "http://localhost:5173"
+              );
+            });
+          } catch (error) {
+            console.error("Error initiating battle:", error);
+          }
+
+          //eventually go to combat
+        },
+      },
+    ]);
+  }
+  haveDialog();
 });
 
 onClick(() => addKaboom(mousePos()));

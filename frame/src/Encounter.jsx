@@ -21,7 +21,7 @@ function Encounter({ encounterName }) {
   useEffect(() => {
     setTimeout(() => {
       iframe.contentWindow.postMessage(
-        "Hello from react",
+        "Hello from Encounter",
         "http://localhost:3001/"
       );
     }, 200);

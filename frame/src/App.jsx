@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
-//import Encounter from "./Encounter.jsx";
+import Encounter from "./Encounter.jsx";
 //had to comment this out because I couldn't get formula-parser to work
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
       iframe.contentWindow.postMessage(
         {
           message: "Load game",
-          position: { X: 600, Y: 600 }, //load these from database
+          position: { X: 64, Y: 64 }, //load these from database
           scene: "town", //load these from database
         },
         "http://localhost:3001/"
@@ -52,23 +52,7 @@ function App() {
     }, 200);
   }, []);
   return (
-    // <div>
-    //   <button
-    //     onClick={() => {
-    //       const iframe = document.querySelector("iframe");
-    //       if (window.parent) {
-    //         window.parent.postMessage(
-    //           "Hello from parent",
-    //           "http://localhost:5173"
-    //         );
-    //       }
-    //     }}
-    //   >
-    //     Send Message to Iframe
-    //   </button>
-    // </div>
     <div>
-      <h1>React App with Iframe</h1>
       {isBattling && <p>Battle is ongoing...</p>}
       <iframe
         tag="iframe"
