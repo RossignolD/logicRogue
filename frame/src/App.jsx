@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -6,10 +6,10 @@ import Encounter from "./Encounter.jsx";
 //had to comment this out because I couldn't get formula-parser to work
 
 function App() {
-  const [isBattling, setIsBattling] = useState(false);
-
+  const [isBattling, setIsBattling] = useState(true);
+  const iframeRef = useRef(null);
   useEffect(() => {
-    const iframe = document.querySelector("iframe");
+    const iframe = iframeRef.current;
     if (iframe) {
       iframe.style.height = `${window.innerHeight}px`;
       iframe.style.width = `${window.innerWidth}px`;
@@ -60,8 +60,14 @@ function App() {
         width="100%"
         height="100%"
         allowFullScreen={true}
+        ref={iframeRef}
       ></iframe>
-      {isBattling && <Encounter encounterName="Encounter 1.3"></Encounter>}
+      {isBattling && (
+        <Encounter
+          encounterName="Encounter 1.3"
+          iframeRef={iframeRef}
+        ></Encounter>
+      )}
     </div>
   );
 }
