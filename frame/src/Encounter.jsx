@@ -59,7 +59,11 @@ function Encounter({ encounterName, iframeRef }) {
       try {
         nd.current.addLine(pendingRule, inventoryItems[i1]); // You must implement this method
         updateInventory(nd.current.prettyPrintLines());
-        if (nd.current.isSolved()) {
+        if (
+          nd.current.isSolved(
+            nd.current.lines[nd.current.lines.length - 1].tree
+          )
+        ) {
           iframeRef.current.contentWindow.postMessage(
             "Proof completed! YAY!",
             "http://localhost:3001/"
@@ -78,7 +82,11 @@ function Encounter({ encounterName, iframeRef }) {
       try {
         nd.current.addLine(pendingRule, inventoryItems[i1], inventoryItems[i2]);
         updateInventory(nd.current.prettyPrintLines());
-        if (nd.current.isSolved()) {
+        if (
+          nd.current.isSolved(
+            nd.current.lines[nd.current.lines.length - 1].tree
+          )
+        ) {
           console.log("Message sent");
           iframeRef.current.contentWindow.postMessage(
             "Proof completed! YAY!",
