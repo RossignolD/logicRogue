@@ -84,6 +84,14 @@ function App() {
 
     fetchData();
   }, []);
+  const handleLogicError = (x) => {
+    iframeRef.current.contentWindow.postMessage(
+      "Proof failed! BOO!",
+      "http://localhost:3001/"
+    );
+    setIsBattling(false);
+  };
+
   return (
     <div className={styles.appGrid}>
       {
@@ -108,7 +116,7 @@ function App() {
       </div>
       {isBattling && (
         <div className={styles.encounterContainer}>
-          <ErrorBoundary fallback={<div>Something went wrong</div>}>
+          <ErrorBoundary onError={handleLogicError}>
             <Encounter
               encounterName="Encounter 1.3"
               iframeRef={iframeRef}
