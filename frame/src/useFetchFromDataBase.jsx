@@ -9,7 +9,7 @@ function useFetch({ url, method = "GET", body = {} }) {
     setLoading(true);
     setData(null);
     setError(null);
-
+    body.playerId = "a422ea59-9549-4ef8-bb13-6cda3538a7f3";
     const fetchData = async () => {
       try {
         const response = await fetch(url, {

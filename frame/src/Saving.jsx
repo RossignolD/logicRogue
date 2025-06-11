@@ -6,11 +6,8 @@ function Saving({ posX, posY, scene, setIsSaving, playerId }) {
     url: "/game/save",
     method: "POST",
     body: {
-      playerId,
-      playerData: {
-        position: { X: posX, Y: posY },
-        scene,
-      },
+      currentLocation: { x: posX, y: posY },
+      currentScene: scene,
     },
   });
 

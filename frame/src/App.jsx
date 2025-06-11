@@ -9,7 +9,8 @@ function App() {
   const [isBattling, setIsBattling] = useState(false);
   const iframeRef = useRef(null);
   const [isSaving, setIsSaving] = useState(false);
-  let posX, posY, scene;
+  const [saveData, setSaveData] = useState({ posX: 0, posY: 0, scene: "" });
+
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframe) {
@@ -31,41 +32,63 @@ function App() {
       if (event.data.message === "Save game") {
         setIsSaving(true);
         console.log("Game saved");
-        posX = event.data.position.X;
-        posY = event.data.position.Y;
-        scene = event.data.thisScene;
+        console.log("event data:", event.data);
+        setSaveData({
+          posX: event.data.position.transferGlobalX,
+          posY: event.data.position.transferGlobalY,
+          scene: event.data.thisScene,
+        });
         // console.log("Transferrable data:", event.data.position);
         // console.log("Current scene:", event.data.thisScene);
       }
     });
-    setTimeout(() => {
-      iframe.contentWindow.postMessage(
-        {
-          message: "Load game",
-          position: { X: 64, Y: 64 }, //load these from database
-          scene: "town", //load these from database
-        },
-        "http://localhost:3001/"
-      );
-    }, 1000);
+    // setTimeout(() => {
+    //   iframe.contentWindow.postMessage(
+    //     {
+    //       message: "Load game",
+    //       position: { x: 64, y: 64 }, //load these from database
+    //       scene: "town", //load these from database
+    //     },
+    //     "http://localhost:3001/"
+    //   );
+    // }, 1000);
     setTimeout(() => {
       iframe.contentWindow.postMessage(
         "Hello from react",
         "http://localhost:3001/"
       );
     }, 200);
+    let playerId = "a422ea59-9549-4ef8-bb13-6cda3538a7f3";
+    const fetchData = async () => {
+      const response = await fetch(`/game/save/${playerId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched save data:", data);
+        console.log("Player position:", data.player.currentLocation);
+        console.log("Current scene:", data.player.currentScene);
+        iframe.contentWindow.postMessage(
+          {
+            message: "Load game",
+            position: data.player.currentLocation,
+            scene: data.player.currentScene,
+          },
+          "http://localhost:3001/"
+        );
+
+        // You can set this data to state if needed
+      } else {
+        console.error("Failed to fetch save data");
+      }
+    };
+
+    fetchData();
   }, []);
   return (
     <div className={styles.appGrid}>
       {
         isSaving && (
           <div className={styles.savingContainer}>
-            <Saving
-              posX={posX}
-              posY={posY}
-              scene={scene}
-              setIsSaving={setIsSaving}
-            ></Saving>
+            <Saving {...saveData} setIsSaving={setIsSaving}></Saving>
           </div>
         )
         //need data from iframe to save

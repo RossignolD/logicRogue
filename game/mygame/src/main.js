@@ -48,8 +48,8 @@ window.addEventListener("message", (event) => {
   if (event.data.message === "Load game") {
     console.log("Message received from parent:", event.data);
     let sceneToBeLoaded = event.data.scene;
-    globalX = event.data.position.X;
-    globalY = event.data.position.Y;
+    globalX = event.data.position.x;
+    globalY = event.data.position.y;
     go(sceneToBeLoaded);
   }
 });
