@@ -6,7 +6,7 @@ import Encounter from "./Encounter.jsx";
 //had to comment this out because I couldn't get formula-parser to work
 
 function App() {
-  const [isBattling, setIsBattling] = useState(true);
+  const [isBattling, setIsBattling] = useState(false);
   const iframeRef = useRef(null);
   useEffect(() => {
     const iframe = iframeRef.current;

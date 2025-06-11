@@ -103,9 +103,9 @@ function Encounter({ encounterName, iframeRef }) {
 
   return (
     <div className={styles.Encounter}>
-      <div>This is codex icon</div>
       <div className={styles.showLine}>
         <h1>
+          You are aiming to prove:{" "}
           {treeToSentence(parseSentence(encounters[encounterName].showLine))}
         </h1>
       </div>
