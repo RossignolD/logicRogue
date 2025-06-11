@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import styles from "./App.module.css";
+import "./App.module.css";
 import Encounter from "./Encounter.jsx";
 import useFetch from "./useFetchFromDataBase.jsx";
+import Saving from "./Saving.jsx";
 
 function App() {
   const [isBattling, setIsBattling] = useState(false);
@@ -13,14 +13,14 @@ function App() {
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframe) {
-      iframe.style.height = `${window.innerHeight}px`;
-      iframe.style.width = `${window.innerWidth}px`;
+      iframe.style.height = `${window.innerHeight - 160}px`;
+      iframe.style.width = `${window.innerWidth - 160}px`;
     }
     window.addEventListener("resize", () => {
       const iframe = document.querySelector("iframe");
       if (iframe) {
-        iframe.style.height = `${window.innerHeight}px`;
-        iframe.style.width = `${window.innerWidth}px`;
+        iframe.style.height = `${window.innerHeight - 160}px`;
+        iframe.style.width = `${window.innerWidth - 160}px`;
       }
     });
     window.addEventListener("message", (event) => {
@@ -56,23 +56,23 @@ function App() {
     }, 200);
   }, []);
   return (
-    <div>
-      <div>
-        {
-          isSaving && (
+    <div className={styles.appGrid}>
+      {
+        isSaving && (
+          <div className={styles.savingContainer}>
             <Saving
               posX={posX}
               posY={posY}
               scene={scene}
               setIsSaving={setIsSaving}
             ></Saving>
-          )
-          //need data from iframe to save
-          //set is saving to false when done
-          //inside saving component that's where I use fetch hook
-        }
-      </div>
-      <div>
+          </div>
+        )
+        //need data from iframe to save
+        //set is saving to false when done
+        //inside saving component that's where I use fetch hook
+      }
+      <div className={styles.gameContainer}>
         <iframe
           tag="iframe"
           src="http://localhost:3001"
@@ -82,14 +82,14 @@ function App() {
           ref={iframeRef}
         ></iframe>
       </div>
-      <div>
-        {isBattling && (
+      {isBattling && (
+        <div className={styles.encounterContainer}>
           <Encounter
             encounterName="Encounter 1.3"
             iframeRef={iframeRef}
           ></Encounter>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
