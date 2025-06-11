@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import styles from "./App.module.css";
 import "./App.module.css";
 import Encounter from "./Encounter.jsx";
@@ -107,12 +108,14 @@ function App() {
       </div>
       {isBattling && (
         <div className={styles.encounterContainer}>
-          <Encounter
-            encounterName="Encounter 1.3"
-            iframeRef={iframeRef}
-            isBatting={isBattling}
-            setIsBattling={setIsBattling}
-          ></Encounter>
+          <ErrorBoundary fallback={<div>Something went wrong</div>}>
+            <Encounter
+              encounterName="Encounter 1.3"
+              iframeRef={iframeRef}
+              isBatting={isBattling}
+              setIsBattling={setIsBattling}
+            ></Encounter>
+          </ErrorBoundary>
         </div>
       )}
     </div>
