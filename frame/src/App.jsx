@@ -106,6 +106,9 @@ function App() {
         //set is saving to false when done
         //inside saving component that's where I use fetch hook
       }
+      <div className={styles.title}>
+        <h1>Logic Rogue</h1>
+      </div>
       <div className={styles.gameContainer}>
         <iframe
           tag="iframe"
