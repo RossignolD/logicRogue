@@ -8,7 +8,7 @@ const playerSchema = new mongoose.Schema({
   inventory: { type: [String], default: [] }, // Array of item IDs
   spellbook: { type: [String], default: [] }, // Array of spell IDs/names
   currentLocation: { type: {x, y}, default: {x:0, y:0} },
-  currentScene: { type: String, default: [] },
+  currentScene: { type: String, default: "" },
   solvedPuzzles: { type: [String], default: [] }, // Now stores IDs of solved LogicPuzzles
 }, { _id: false }); 
 
