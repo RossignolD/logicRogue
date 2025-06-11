@@ -3,7 +3,7 @@ import "kaplay/global";
 
 const moveSpeed = 200;
 
-const map = ["110010", "010001", "222010"];
+const map = ["110010", "010001", "222010", "010001", "110010", "000000"];
 const k = kaplay({
   background: "#D3D3D3",
   scale: 1,
@@ -270,9 +270,10 @@ k.scene("wizard_dialogue", () => {
   const choices = [];
 
   function clearChoices() {
-    for (const c of choices) {
-      c.destroy();
+    for (const choice of choices) {
+      destroy(choice);
     }
+    destroyAll("dialogButton");
     choices.length = 0;
   }
 
@@ -281,6 +282,7 @@ k.scene("wizard_dialogue", () => {
     clearChoices();
 
     if (options) {
+      console.log(options);
       const totalHeight = options.length * (BUTTON_HEIGHT + 10);
       const startY = (k.height() + DIALOG_HEIGHT) / 2 - totalHeight / 2 + 20;
 
@@ -295,6 +297,7 @@ k.scene("wizard_dialogue", () => {
           k.area(),
           k.z(12),
           { action: opt.onSelect },
+          "dialogButton",
         ]);
 
         k.add([
@@ -314,44 +317,62 @@ k.scene("wizard_dialogue", () => {
   }
 
   // Start the dialogue
-  showDialog("You see a mysterious figure. What do you do?", [
-    {
-      text: "Talk to them",
-      onSelect: () => {
-        showDialog("They nod and say hello.");
-        //will eventually lead to more dialogue options
-      },
-    },
-    {
-      text: "Run away",
-      onSelect: () => {
-        showDialog("You run. Coward.");
-        globalX -= 64;
-        globalY -= 64;
-        wait(1, () => {
-          go("town");
-        });
-      },
-    },
-    {
-      text: "Draw your sword",
-      onSelect: () => {
-        showDialog("They raise an eyebrow. 'Really?'");
-        try {
+  function haveDialog() {
+    showDialog("You see a mysterious figure. What do you do?", [
+      {
+        text: "Talk to them",
+        onSelect: () => {
+          showDialog("They nod and say hello.");
           wait(1, () => {
-            window.parent.postMessage(
-              "battle initiated",
-              "http://localhost:5173"
-            );
+            haveDialog();
           });
-        } catch (error) {
-          console.error("Error initiating battle:", error);
-        }
-
-        //eventually go to combat
+        },
       },
-    },
-  ]);
+      {
+        text: "Run away",
+        onSelect: () => {
+          showDialog("You run. Coward.");
+          globalX -= 70;
+          globalY -= 70;
+          wait(1, () => {
+            go("town");
+          });
+        },
+      },
+      {
+        text: "Draw your sword",
+        onSelect: () => {
+          showDialog("They raise an eyebrow. 'Really?'");
+          try {
+            wait(1, () => {
+              window.parent.postMessage(
+                "battle initiated",
+                "http://localhost:5173"
+              );
+            });
+          } catch (error) {
+            console.error("Error initiating battle:", error);
+          }
+          //eventually go to combat
+        },
+      },
+    ]);
+  }
+  haveDialog();
+  let proofIsComplete = false;
+
+  window.addEventListener("message", (event) => {
+    if (event.data === "Proof completed! YAY!") {
+      proofIsComplete = true;
+      console.log(choices);
+      showDialog("You have completed the proof! The wizard nods in approval.");
+      wait(1, () => {
+        globalX -= 65;
+        globalY -= 65;
+        go("town");
+      });
+    }
+  });
 });
 
 onClick(() => addKaboom(mousePos()));

@@ -43,6 +43,7 @@ export class NaturalDeduction {
   }
 
   isExistingLine(sentence) {
+    console.log(sentence);
     if (sentence !== null) {
       const myTree = parseSentence(sentence);
       return this.lines.some(
@@ -66,6 +67,7 @@ export class NaturalDeduction {
         return modusPonens(sentence1, sentence2);
       }
       if (rule === "MT") {
+        console.log(modusTollens(sentence1, sentence2));
         return modusTollens(sentence1, sentence2);
       }
     }

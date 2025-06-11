@@ -1,9 +1,9 @@
 import FormulaParser from "formula-parser";
 
 const variableKey = "atomic";
-const unaries = [{ symbol: "~", key: "NOT", precedence: 0 }];
+const unaries = [{ symbol: "~", key: "NOT", precedence: 1 }];
 const binaries = [
-  { symbol: "-", key: "ONLY IF", precedence: 1, associativity: "right" },
+  { symbol: "-", key: "ONLY IF", precedence: 0, associativity: "left" },
 ];
 
 const unmodifiedParser = new FormulaParser(variableKey, unaries, binaries);
@@ -15,6 +15,7 @@ function parseSentence(sentence) {
       tree["atomic"] = sentence;
       return tree;
     } else {
+      console.log(unmodifiedParser.parse(sentence));
       return unmodifiedParser.parse(sentence);
     }
   } catch (error) {
@@ -26,12 +27,12 @@ function treeToSentence(tree) {
   if (tree["atomic"]) {
     return tree["atomic"];
   } else if ("NOT" in tree) {
-    return "(" + "~" + treeToSentence(tree["NOT"]) + ")";
+    return "~" + treeToSentence(tree["NOT"]);
   } else if ("ONLY IF" in tree) {
     return (
       "(" +
       treeToSentence(tree["ONLY IF"][0]) +
-      "→" +
+      "-" +
       treeToSentence(tree["ONLY IF"][1]) +
       ")"
     );
@@ -113,7 +114,7 @@ function modusTollens(sentence1, sentence2) {
     } else {
       return "Negated Consequent is not correct";
     }
-  } else if ("ONLY IF" in tree1) {
+  } else if ("ONLY IF" in tree2) {
     const antecedent = getAntecedent(sentence2);
     const consequent = getConsequent(sentence2);
     const negatedAntecedent = negateTree(antecedent);

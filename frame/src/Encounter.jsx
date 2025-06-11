@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Encounter.module.css";
 import { NaturalDeduction } from "../../logic/naturalDeduction2";
 import { parseSentence, treeToSentence } from "../../logic/parsingAndRules2";
@@ -9,19 +9,20 @@ import encounters from "../../encounters.json";
 
 console.log(encounters);
 
-function Encounter({ encounterName }) {
+function Encounter({ encounterName, iframeRef }) {
   const showLine = encounters[encounterName]["showLine"];
-  const nd = new NaturalDeduction(
-    showLine,
-    encounters[encounterName]["premises"]
+  const nd = useRef(
+    new NaturalDeduction(showLine, encounters[encounterName]["premises"])
   );
-  const [inventoryItems, updateInventory] = useState(nd.prettyPrintLines());
+  const [inventoryItems, updateInventory] = useState(
+    nd.current.prettyPrintLines()
+  );
   const [pendingRule, setPendingRule] = useState(null);
   const [selectedIndices, setSelectedIndices] = useState([]);
   useEffect(() => {
     setTimeout(() => {
-      iframe.contentWindow.postMessage(
-        "Hello from react",
+      iframeRef.current.contentWindow.postMessage(
+        "Hello from Encounter",
         "http://localhost:3001/"
       );
     }, 200);
@@ -33,8 +34,8 @@ function Encounter({ encounterName }) {
 
   const handleClick = (rule, event) => {
     if (rule == "Add Premises") {
-      nd.addPremises();
-      updateInventory(nd.prettyPrintLines());
+      nd.current.addPremises();
+      updateInventory(nd.current.prettyPrintLines());
       console.log("Premises added");
     } else if (["DNE", "DNI", "MP", "MT"]) {
       setPendingRule(rule);
@@ -48,14 +49,50 @@ function Encounter({ encounterName }) {
     const newSelected = [...selectedIndices, idx];
     setSelectedIndices(newSelected);
 
-    if (newSelected.length === 2) {
+    if (
+      (pendingRule == "DNI" || pendingRule == "DNE") &&
+      newSelected.length === 1
+    ) {
       // Try to apply the rule to the selected items
       // You need to implement this logic in your NaturalDeduction class
+      const [i1] = newSelected;
+      try {
+        nd.current.addLine(pendingRule, inventoryItems[i1]); // You must implement this method
+        updateInventory(nd.current.prettyPrintLines());
+        if (
+          nd.current.isSolved(
+            nd.current.lines[nd.current.lines.length - 1].tree
+          )
+        ) {
+          iframeRef.current.contentWindow.postMessage(
+            "Proof completed! YAY!",
+            "http://localhost:3001/"
+          );
+        }
+      } catch (e) {
+        alert(`Failed to apply ${pendingRule}: ${e.message}`);
+      }
+      setPendingRule(null);
+      setSelectedIndices([]);
+    } else if (
+      (pendingRule == "MP" || pendingRule == "MT") &&
+      newSelected.length === 2
+    ) {
       const [i1, i2] = newSelected;
       try {
-        nd.applyInferenceRule(pendingRule, i1, i2); // You must implement this method
-        updateInventory(nd.prettyPrintLines());
-        alert(`${pendingRule} applied to items ${newSelected.join(", ")}`);
+        nd.current.addLine(pendingRule, inventoryItems[i1], inventoryItems[i2]);
+        updateInventory(nd.current.prettyPrintLines());
+        if (
+          nd.current.isSolved(
+            nd.current.lines[nd.current.lines.length - 1].tree
+          )
+        ) {
+          console.log("Message sent");
+          iframeRef.current.contentWindow.postMessage(
+            "Proof completed! YAY!",
+            "http://localhost:3001/"
+          );
+        }
       } catch (e) {
         alert(`Failed to apply ${pendingRule}: ${e.message}`);
       }
@@ -66,9 +103,9 @@ function Encounter({ encounterName }) {
 
   return (
     <div className={styles.Encounter}>
-      <div>This is codex icon</div>
       <div className={styles.showLine}>
         <h1>
+          You are aiming to prove:{" "}
           {treeToSentence(parseSentence(encounters[encounterName].showLine))}
         </h1>
       </div>
@@ -84,9 +121,9 @@ function Encounter({ encounterName }) {
       </div>
       <div className={styles.rules}>
         <h2>Rules</h2>
-        {encounters[encounterName].unlockedRules.map((rule) => {
+        {encounters[encounterName].unlockedRules.map((rule, index) => {
           return (
-            <button onClick={(event) => handleClick(rule, event)}>
+            <button onClick={(event) => handleClick(rule, event)} key={index}>
               {rule}
             </button>
           );

@@ -1,6 +1,5 @@
-.Encounter {
+.encounterContainer {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 }
-
-/* z-index of the Par static element above all other components */
