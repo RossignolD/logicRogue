@@ -113,7 +113,7 @@ scene("town", () => {
   loadSprite("wizard", "sprites/wizard.png"); //change this to assets path
   const wizard = add([
     sprite("wizard"),
-    pos(500, 500),
+    pos(700, 700),
     anchor("center"),
     area(),
     body({ isStatic: true }),
@@ -332,8 +332,8 @@ k.scene("wizard_dialogue", () => {
         text: "Run away",
         onSelect: () => {
           showDialog("You run. Coward.");
-          globalX -= 70;
-          globalY -= 70;
+          globalX -= 100;
+          globalY -= 100;
           wait(1, () => {
             go("town");
           });
@@ -364,11 +364,18 @@ k.scene("wizard_dialogue", () => {
   window.addEventListener("message", (event) => {
     if (event.data === "Proof completed! YAY!") {
       proofIsComplete = true;
-      console.log(choices);
       showDialog("You have completed the proof! The wizard nods in approval.");
       wait(1, () => {
         globalX -= 65;
         globalY -= 65;
+        go("town");
+      });
+    } else if (event.data === "Proof failed! BOO!") {
+      proofIsComplete = true;
+      showDialog("You have failed the proof! The wizard shakes his head.");
+      wait(1, () => {
+        globalX -= 80;
+        globalY -= 80;
         go("town");
       });
     }

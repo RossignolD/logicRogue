@@ -62,24 +62,26 @@ function App() {
     let playerId = "a422ea59-9549-4ef8-bb13-6cda3538a7f3";
     const fetchData = async () => {
       const response = await fetch(`/game/save/${playerId}`);
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Fetched save data:", data);
-        console.log("Player position:", data.player.currentLocation);
-        console.log("Current scene:", data.player.currentScene);
-        iframe.contentWindow.postMessage(
-          {
-            message: "Load game",
-            position: data.player.currentLocation,
-            scene: data.player.currentScene,
-          },
-          "http://localhost:3001/"
-        );
+      setTimeout(async () => {
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched save data:", data);
+          console.log("Player position:", data.player.currentLocation);
+          console.log("Current scene:", data.player.currentScene);
+          iframe.contentWindow.postMessage(
+            {
+              message: "Load game",
+              position: data.player.currentLocation,
+              scene: data.player.currentScene,
+            },
+            "http://localhost:3001/"
+          );
 
-        // You can set this data to state if needed
-      } else {
-        console.error("Failed to fetch save data");
-      }
+          // You can set this data to state if needed
+        } else {
+          console.error("Failed to fetch save data");
+        }
+      }, 1000);
     };
 
     fetchData();
@@ -116,7 +118,10 @@ function App() {
       </div>
       {isBattling && (
         <div className={styles.encounterContainer}>
-          <ErrorBoundary onError={handleLogicError}>
+          <ErrorBoundary
+            onError={handleLogicError}
+            fallback={<div>Error occurred</div>}
+          >
             <Encounter
               encounterName="Encounter 1.3"
               iframeRef={iframeRef}
