@@ -7,7 +7,8 @@ const playerSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true }, // Store the hashed password
   inventory: { type: [String], default: [] }, // Array of item IDs
   spellbook: { type: [String], default: [] }, // Array of spell IDs/names
-  currentLocation: { type: String, default: 'start' },
+  currentLocation: { type: {x, y}, default: {x:0, y:0} },
+  currentScene: { type: String, default: [] },
   solvedPuzzles: { type: [String], default: [] }, // Now stores IDs of solved LogicPuzzles
 }, { _id: false }); 
 
