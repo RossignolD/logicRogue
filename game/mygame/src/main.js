@@ -270,9 +270,10 @@ k.scene("wizard_dialogue", () => {
   const choices = [];
 
   function clearChoices() {
-    for (const c of choices) {
-      c.destroy();
+    for (const choice of choices) {
+      destroy(choice);
     }
+    destroyAll("dialogButton");
     choices.length = 0;
   }
 
@@ -281,6 +282,7 @@ k.scene("wizard_dialogue", () => {
     clearChoices();
 
     if (options) {
+      console.log(options);
       const totalHeight = options.length * (BUTTON_HEIGHT + 10);
       const startY = (k.height() + DIALOG_HEIGHT) / 2 - totalHeight / 2 + 20;
 
@@ -295,6 +297,7 @@ k.scene("wizard_dialogue", () => {
           k.area(),
           k.z(12),
           { action: opt.onSelect },
+          "dialogButton",
         ]);
 
         k.add([
@@ -329,8 +332,8 @@ k.scene("wizard_dialogue", () => {
         text: "Run away",
         onSelect: () => {
           showDialog("You run. Coward.");
-          globalX -= 64;
-          globalY -= 64;
+          globalX -= 70;
+          globalY -= 70;
           wait(1, () => {
             go("town");
           });
@@ -356,23 +359,18 @@ k.scene("wizard_dialogue", () => {
     ]);
   }
   haveDialog();
+  let proofIsComplete = false;
 
   window.addEventListener("message", (event) => {
     if (event.data === "Proof completed! YAY!") {
-      console.log("Proof completed!");
-    }
-  });
-
-  window.addEventListener("message", (event) => {
-    if (event.data === "Proof completed! YAY!") {
-      showDialog("You have completed the proof! The wizard nods in approval.", [
-        {
-          text: "Continue",
-          onSelect: () => {
-            go("town");
-          },
-        },
-      ]);
+      proofIsComplete = true;
+      console.log(choices);
+      showDialog("You have completed the proof! The wizard nods in approval.");
+      wait(1, () => {
+        globalX -= 65;
+        globalY -= 65;
+        go("town");
+      });
     }
   });
 });
