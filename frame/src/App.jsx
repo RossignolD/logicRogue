@@ -57,33 +57,39 @@ function App() {
   }, []);
   return (
     <div>
-      {
-        isSaving && (
-          <Saving
-            posX={posX}
-            posY={posY}
-            scene={scene}
-            setIsSaving={setIsSaving}
-          ></Saving>
-        )
-        //need data from iframe to save
-        //set is saving to false when done
-        //inside saving component that's where I use fetch hook
-      }
-      <iframe
-        tag="iframe"
-        src="http://localhost:3001"
-        width="100%"
-        height="100%"
-        allowFullScreen={true}
-        ref={iframeRef}
-      ></iframe>
-      {isBattling && (
-        <Encounter
-          encounterName="Encounter 1.3"
-          iframeRef={iframeRef}
-        ></Encounter>
-      )}
+      <div>
+        {
+          isSaving && (
+            <Saving
+              posX={posX}
+              posY={posY}
+              scene={scene}
+              setIsSaving={setIsSaving}
+            ></Saving>
+          )
+          //need data from iframe to save
+          //set is saving to false when done
+          //inside saving component that's where I use fetch hook
+        }
+      </div>
+      <div>
+        <iframe
+          tag="iframe"
+          src="http://localhost:3001"
+          width="100%"
+          height="100%"
+          allowFullScreen={true}
+          ref={iframeRef}
+        ></iframe>
+      </div>
+      <div>
+        {isBattling && (
+          <Encounter
+            encounterName="Encounter 1.3"
+            iframeRef={iframeRef}
+          ></Encounter>
+        )}
+      </div>
     </div>
   );
 }
