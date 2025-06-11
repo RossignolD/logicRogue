@@ -3,11 +3,13 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Encounter from "./Encounter.jsx";
-//had to comment this out because I couldn't get formula-parser to work
+import useFetch from "./useFetchFromDataBase.jsx";
 
 function App() {
   const [isBattling, setIsBattling] = useState(true);
   const iframeRef = useRef(null);
+  const [isSaving, setIsSaving] = useState(false);
+  let posX, posY, scene;
   useEffect(() => {
     const iframe = iframeRef.current;
     if (iframe) {
@@ -26,12 +28,14 @@ function App() {
       if (event.data === "battle initiated") {
         setIsBattling(true);
       }
-    });
-    window.addEventListener("message", (event) => {
       if (event.data.message === "Save game") {
+        setIsSaving(true);
         console.log("Game saved");
-        console.log("Transferrable data:", event.data.position);
-        console.log("Current scene:", event.data.thisScene);
+        posX = event.data.position.X;
+        posY = event.data.position.Y;
+        scene = event.data.thisScene;
+        // console.log("Transferrable data:", event.data.position);
+        // console.log("Current scene:", event.data.thisScene);
       }
     });
     setTimeout(() => {
@@ -53,7 +57,19 @@ function App() {
   }, []);
   return (
     <div>
-      {isBattling && <p>Battle is ongoing...</p>}
+      {
+        isSaving && (
+          <Saving
+            posX={posX}
+            posY={posY}
+            scene={scene}
+            setIsSaving={setIsSaving}
+          ></Saving>
+        )
+        //need data from iframe to save
+        //set is saving to false when done
+        //inside saving component that's where I use fetch hook
+      }
       <iframe
         tag="iframe"
         src="http://localhost:3001"
