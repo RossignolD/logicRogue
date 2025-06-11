@@ -3,7 +3,7 @@ import FormulaParser from "formula-parser";
 const variableKey = "atomic";
 const unaries = [{ symbol: "~", key: "NOT", precedence: 1 }];
 const binaries = [
-  { symbol: "-", key: "ONLY IF", precedence: 0, associativity: "left" },
+  { symbol: "→", key: "ONLY IF", precedence: 0, associativity: "left" },
 ];
 
 const unmodifiedParser = new FormulaParser(variableKey, unaries, binaries);
@@ -32,7 +32,7 @@ function treeToSentence(tree) {
     return (
       "(" +
       treeToSentence(tree["ONLY IF"][0]) +
-      "-" +
+      "→" +
       treeToSentence(tree["ONLY IF"][1]) +
       ")"
     );

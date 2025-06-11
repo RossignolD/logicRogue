@@ -9,7 +9,7 @@ import encounters from "../../encounters.json";
 
 console.log(encounters);
 
-function Encounter({ encounterName, iframeRef }) {
+function Encounter({ encounterName, iframeRef, isBattling, setIsBattling }) {
   const showLine = encounters[encounterName]["showLine"];
   const nd = useRef(
     new NaturalDeduction(showLine, encounters[encounterName]["premises"])
@@ -68,6 +68,7 @@ function Encounter({ encounterName, iframeRef }) {
             "Proof completed! YAY!",
             "http://localhost:3001/"
           );
+          setIsBattling(false);
         }
       } catch (e) {
         alert(`Failed to apply ${pendingRule}: ${e.message}`);
@@ -92,6 +93,7 @@ function Encounter({ encounterName, iframeRef }) {
             "Proof completed! YAY!",
             "http://localhost:3001/"
           );
+          setIsBattling(false);
         }
       } catch (e) {
         alert(`Failed to apply ${pendingRule}: ${e.message}`);
@@ -110,20 +112,28 @@ function Encounter({ encounterName, iframeRef }) {
         </h1>
       </div>
       <div className={styles.inventory}>
-        <h2>Encounter Inventory</h2>
-        <div>
+        <h2 className={styles.inventoryHeader}>Encounter Inventory</h2>
+        <div className={styles.inventoryButtonsCollection}>
           {inventoryItems.map((item, idx) => {
             return (
-              <button onClick={() => handleInventoryClick(idx)}>{item}</button>
+              <button
+                onClick={() => handleInventoryClick(idx)}
+                className={styles.inventoryButton}
+              >
+                {item}
+              </button>
             );
           })}
         </div>
-      </div>
-      <div className={styles.rules}>
-        <h2>Rules</h2>
+        <div className={styles.ruleButtonsCollection}></div>
+        <h2 className={styles.rulesHeader}>Rules</h2>
         {encounters[encounterName].unlockedRules.map((rule, index) => {
           return (
-            <button onClick={(event) => handleClick(rule, event)} key={index}>
+            <button
+              onClick={(event) => handleClick(rule, event)}
+              key={index}
+              className={styles.ruleButton}
+            >
               {rule}
             </button>
           );

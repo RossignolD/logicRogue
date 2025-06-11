@@ -110,6 +110,8 @@ function App() {
           <Encounter
             encounterName="Encounter 1.3"
             iframeRef={iframeRef}
+            isBatting={isBattling}
+            setIsBattling={setIsBattling}
           ></Encounter>
         </div>
       )}
