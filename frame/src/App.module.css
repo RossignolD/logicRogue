@@ -30,3 +30,11 @@
   left: 25%;
   justify-self: center;
 }
+
+.title {
+  grid-area: 1/2/2/3;
+  color: white;
+  font-size: 4rem;
+  text-align: center;
+  margin-top: 1rem;
+}

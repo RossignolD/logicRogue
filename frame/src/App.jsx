@@ -109,6 +109,9 @@ function App() {
       <div className={styles.title}>
         <h1>Logic Rogue</h1>
       </div>
+      <div className={styles.title}>
+        <h1>Logic Rogue</h1>
+      </div>
       <div className={styles.gameContainer}>
         <iframe
           tag="iframe"
